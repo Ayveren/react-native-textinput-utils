@@ -7,9 +7,10 @@
 //
 
 #import "RCTTextView.h"
+#import "RCTUITextView.h"
 
 @interface RCTTextView (RCTTextViewExtension)
 
-- (UITextField *)getTextView;
+- (RCTUITextView *)getTextView;
 
 @end

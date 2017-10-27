@@ -7,10 +7,12 @@
 //
 
 #import "RCTTextViewExtension.h"
+#import "RCTUITextView.h"
 
 @implementation RCTTextView (RCTTextViewExtension)
 
-- (UITextField *)getTextView
+- (RCTUITextView *)getTextView;
+
 {
     // actually returns a UITextView, I wrote this way just want to surpress warnings
     return [self valueForKey:@"_textView"];

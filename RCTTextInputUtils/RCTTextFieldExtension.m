@@ -9,18 +9,17 @@
 #import "RCTTextFieldExtension.h"
 #import "RCTUITextField.h"
 
-
 @implementation RCTTextField (RCTTextFieldExtension)
 
 - (void)setSelectedRange:(NSRange)range
 {
-
-    UITextView *textField = nil;
-
+    RCTUITextField *textField;
+    
     UITextPosition* beginning = textField.beginningOfDocument;
-    UITextPosition* startPosition = [textField positionFromPosition:beginning offset:range.location];
-    UITextPosition* endPosition = [textField positionFromPosition:beginning offset:range.location + range.length];
-    UITextRange* selectionRange = [textField textRangeFromPosition:startPosition toPosition:endPosition];
+    UITextPosition* start = [textField positionFromPosition:beginning offset:range.location];
+    UITextPosition* end = [textField positionFromPosition:beginning offset:range.location + range.length];
+    
+    UITextRange* selectionRange = [textField textRangeFromPosition:start toPosition:end];
     [textField setSelectedTextRange:selectionRange];
     }
 
