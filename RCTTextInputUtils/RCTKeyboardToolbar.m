@@ -11,8 +11,13 @@
 #import <React/RCTBridge.h>
 #import <React/RCTConvert.h>
 #import "RCTTextField.h"
+#import "RCTUITextField.h"
+#import "RCTUITextView.h"
+
 #import "RCTTextView.h"
 #import <React/RCTUIManager.h>
+#import <React/RCTUtils.h>
+
 #import <React/RCTEventDispatcher.h>
 #import "RCTKeyboardPicker.h"
 #import "RCTTextViewExtension.h"
@@ -45,13 +50,13 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
         
         // The convert is little bit dangerous, change it if you are going to fock the project
         // Or do not assign any non-common property between UITextView and UITextView
-        UITextField *textView;
+        UITextView *textView;
         if ([view class] == [RCTTextView class]) {
             RCTTextView *reactNativeTextView = ((RCTTextView *)view);
             textView = [reactNativeTextView getTextView];
         }
         else {
-            RCTTextField *reactNativeTextView = ((RCTTextField *)view);
+            RCTUITextField *reactNativeTextView = ((RCTUITextField *)view);
             textView = reactNativeTextView;
         }
         
@@ -60,8 +65,9 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
             textView.tintColor = [RCTConvert UIColor:options[@"tintColor"]];
         }
 
-        UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-        
+        UIToolbar* numberToolbar;// = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
+        numberToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+
         NSInteger toolbarStyle = [RCTConvert NSInteger:options[@"barStyle"]];
         numberToolbar.barStyle = toolbarStyle;
         
@@ -98,6 +104,8 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
         
         NSDictionary *datePickerViewData = [RCTConvert NSDictionary:options[@"datePickerOptions"]];
         if(datePickerViewData != nil){
+            NSString * someString = @"Something To Print";
+            NSLog(@"%@", someString);
             RCTKeyboardDatePicker *datePickerView = [[RCTKeyboardDatePicker alloc] init];
             datePickerView.tag = [currentUid intValue];
             [datePickerView setCallbackObject:self withSelector:@selector(dateSelected:)];
@@ -106,7 +114,10 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
         }
         
         [numberToolbar sizeToFit];
-        textView.inputAccessoryView = numberToolbar;
+        if (textView != nil)
+        {
+            textView.inputAccessoryView = numberToolbar;
+        }
         
         callback(@[[NSNull null], [currentUid stringValue]]);
     }];
@@ -136,7 +147,7 @@ RCT_EXPORT_METHOD(moveCursorToLast:(nonnull NSNumber *)reactNode) {
             RCTLogError(@"RCTKeyboardToolbar: TAG #%@ NOT FOUND", reactNode);
             return;
         }
-        RCTTextField *textView = ((RCTTextField *)view);
+        RCTUITextField *textView = ((RCTUITextField *)view);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             UITextPosition *position = [textView endOfDocument];
@@ -154,7 +165,7 @@ RCT_EXPORT_METHOD(setSelectedTextRange:(nonnull NSNumber *)reactNode
             RCTLogError(@"RCTKeyboardToolbar: TAG #%@ NOT FOUND", reactNode);
             return;
         }
-        RCTTextField *textView = ((RCTTextField *)view);
+        RCTUITextField *textView = ((RCTUITextField *)view);
         
         NSNumber *startPosition = [RCTConvert NSNumber:options[@"start"]];
         NSNumber *endPosition = [RCTConvert NSNumber:options[@"length"]];

@@ -7,16 +7,20 @@
 //
 
 #import "RCTTextFieldExtension.h"
+#import "RCTUITextField.h"
 
 @implementation RCTTextField (RCTTextFieldExtension)
 
 - (void)setSelectedRange:(NSRange)range
 {
-    UITextPosition* beginning = self.beginningOfDocument;
-    UITextPosition* startPosition = [self positionFromPosition:beginning offset:range.location];
-    UITextPosition* endPosition = [self positionFromPosition:beginning offset:range.location + range.length];
-    UITextRange* selectionRange = [self textRangeFromPosition:startPosition toPosition:endPosition];
-    [self setSelectedTextRange:selectionRange];
-}
+    RCTUITextField *textField;
+    
+    UITextPosition* beginning = textField.beginningOfDocument;
+    UITextPosition* start = [textField positionFromPosition:beginning offset:range.location];
+    UITextPosition* end = [textField positionFromPosition:beginning offset:range.location + range.length];
+    
+    UITextRange* selectionRange = [textField textRangeFromPosition:start toPosition:end];
+    [textField setSelectedTextRange:selectionRange];
+    }
 
 @end
